@@ -14,8 +14,10 @@ public class Calendar {
 
     // On ne peut pas directement stocker Map avec JPA, il faut utiliser OneToMany
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+
     @JoinColumn(name = "calendar_id") // clé étrangère dans CalendarSlot
     private List<CalendarSlot> slots = new ArrayList<>();
+
 
     public Calendar() {}
 

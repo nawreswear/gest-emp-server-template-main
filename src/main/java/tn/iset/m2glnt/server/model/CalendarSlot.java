@@ -1,81 +1,63 @@
 package tn.iset.m2glnt.server.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import tn.iset.m2glnt.server.model.Enseignant;
+import tn.iset.m2glnt.server.model.Salle;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "calendar_slots")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class CalendarSlot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private LocalDateTime time_begin;
-    private LocalDateTime time_end;
+    @NotBlank
+    @Size(max = 50)
+    private String nom;
+
+    // CORRECTION : Supprimer l'annotation @Column ou l'ajuster
+    private LocalDateTime timeBegin;
+
+    // CORRECTION : Ajouter @Column pour time_end si nécessaire
+    @Column(name = "time_end")
+    private LocalDateTime timeEnd; // Renommer en camelCase pour la cohérence
+
     private String description;
     private int version;
 
-    public CalendarSlot() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "enseignant_id")
+    @ToString.Exclude
+    private Enseignant enseignant;
 
-    public CalendarSlot(int id, LocalDateTime time_begin, LocalDateTime time_end, String description, int version) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "salle_id")
+    @ToString.Exclude
+    private Salle salle;
+
+    // Constructeur mis à jour
+    public CalendarSlot(Integer id, String nom, LocalDateTime timeBegin, LocalDateTime timeEnd,
+                        String description, int version, Enseignant enseignant, Salle salle) {
         this.id = id;
-        this.time_begin = time_begin;
-        this.time_end = time_end;
+        this.nom = nom;
+        this.timeBegin = timeBegin;
+        this.timeEnd = timeEnd;
         this.description = description;
         this.version = version;
+        this.enseignant = enseignant;
+        this.salle = salle;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public LocalDateTime getTime_begin() {
-        return time_begin;
-    }
-
-    public LocalDateTime getTime_end() {
-        return time_end;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setTime_begin(LocalDateTime time_begin) {
-        this.time_begin = time_begin;
-    }
-
-    public void setTime_end(LocalDateTime time_end) {
-        this.time_end = time_end;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    @Override
-    public String toString() {
-        return "CalendarSlot{" +
-                "id=" + id +
-                ", time_begin=" + time_begin +
-                ", time_end=" + time_end +
-                ", description='" + description + '\'' +
-                ", version=" + version +
-                '}';
-    }
-
-
 }

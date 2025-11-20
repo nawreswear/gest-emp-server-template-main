@@ -4,15 +4,11 @@ import java.time.LocalDateTime;
 
 public record CalendarSlotDTO(
         int id,
+        String nom,
         String description,
-        TimeInterval timeInterval,
-        int version
-) {
-    public LocalDateTime startTime() {
-        return timeInterval.start();
-    }
-
-    public LocalDateTime endTime() {
-        return timeInterval.end();
-    }
-}
+        LocalDateTime timeBegin,
+        LocalDateTime timeEnd,
+        int version,
+        Long enseignantId,
+        Long salleId
+) {}
